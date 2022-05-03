@@ -4,9 +4,6 @@ server {
   location /static/ {
     alias /django_movie/static;
  }
- location /media/ {
-    alias /django_movie/media;
- }
 
   location / {
     proxy_pass http://localhost:8000/;

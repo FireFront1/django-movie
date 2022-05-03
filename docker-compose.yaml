@@ -25,8 +25,7 @@ services:
     proxy:
         build: ./proxy
         volumes:
-            - static_data:./.django_movie/static
-            - media_data:./.django_movie/media
+            - static_data:./django_movie/static
         restart: always
         ports:
             - "8000:80"
@@ -38,18 +37,21 @@ services:
         ports:
             - "0.0.0.0:6379:6379"
         env_file:
-            - ./dev.prod
+            - ./.env.prod
     celeryworker:
+        build: .
         depends_on:
             - redis
             - app-db
         command: "celery -A django_movie worker -l info"
     celery-beat:
+        build: .
         depends_on:
             - redis
             - app-db
         command: "celery -A django_movie beat -l info"
     celery-flower:
+        build: .
         depends_on:
             - redis
         command: "celery -A django_movie flower --basic_auth=test_user:password_user"
