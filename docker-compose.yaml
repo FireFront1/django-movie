@@ -14,7 +14,7 @@ services:
         depends_on:
             - app-db
     app-db:
-        image: postgres:12-alpine
+        image: postgres:14
         ports:
             - "5432:5432"
         restart: always
@@ -32,6 +32,27 @@ services:
             - "8000:80"
         depends_on:
             - app
+    redis:
+        image: redis:latest
+        hostname: redis
+        ports:
+            - "0.0.0.0:6379:6379"
+        env_file:
+            - ./dev.prod
+    celeryworker:
+        depends_on:
+            - redis
+            - app-db
+        command: "celery -A django_movie worker -l info"
+    celery-beat:
+        depends_on:
+            - redis
+            - app-db
+        command: "celery -A django_movie beat -l info"
+    celery-flower:
+        depends_on:
+            - redis
+        command: "celery -A django_movie flower --basic_auth=test_user:password_user"
 volumes:
     static_data:
     postgres_data:

@@ -327,3 +327,4 @@ tags
 ### Project template
 .pytest_cache/
 .ipython/
+celerybeat-schedule.db
