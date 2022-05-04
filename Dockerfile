@@ -25,6 +25,11 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 # FINAL #
 #########
 
+#nginx settings
+FROM nginx:latest
+
+COPY ./default.conf  /etc/nginx/conf.d/default.conf
+
 FROM python:3.8.3-alpine
 
 # создаем директорию для пользователя

@@ -28,14 +28,17 @@ services:
             - ./.env.prod
     nginx:
         build: ./nginx
+        restart: always
         # Подключаем статические и медиа файлы
         volumes:
             - static_volume:/home/app/web/static
             - media_volume:/home/app/web/media
         ports:
-            - 1337:80
+            - 80:80
         depends_on:
             - web
+        networks:
+            - nginx_network
     redis:
         image: redis:latest
         hostname: redis
@@ -60,6 +63,12 @@ services:
         depends_on:
             - redis
         command: "celery -A django_movie flower --basic_auth=test_user:password_user"
+
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge
 volumes:
     media_volume:
     static_volume:
