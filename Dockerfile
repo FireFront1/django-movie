@@ -17,8 +17,8 @@ RUN pip install --upgrade pip
 # установка зависимостей
 COPY ./requirements.txt .
 RUN pip install --upgrade pip
-RUN sudo apt-get install -y python3-dev
-RUN sudo apt-get install -y libevent-dev
+RUN apt-get install -y python3-dev
+RUN apt-get install -y libevent-dev
 RUN pip install setuptools
 RUN pip install pyparser
 RUN pip install pyparsing
