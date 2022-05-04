@@ -24,11 +24,6 @@ RUN pip install -r requirements.txt
 # FINAL #
 #########
 
-#nginx settings
-FROM nginx:latest
-
-COPY nginx/nginx.conf  /etc/nginx/conf.d/default.conf
-
 FROM python:3.8
 
 # создаем директорию для пользователя
