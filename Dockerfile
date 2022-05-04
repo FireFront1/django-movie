@@ -48,6 +48,7 @@ COPY scripts/entrypoint.prod.sh $APP_HOME
 COPY . $APP_HOME
 
 # изменение прав для пользователя app
+RUN chmod -R 755 $APP_HOME
 RUN chown -R app:app $APP_HOME
 
 # изменение рабочего пользователя
