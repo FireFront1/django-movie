@@ -35,15 +35,12 @@ FROM python:3.8
 RUN mkdir -p /home/app
 
 # создаем отдельного пользователя
-RUN addgroup -S app
-RUN adduser -S app -G app
+RUN adduser app
 
 # создание каталога для приложения
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
 RUN mkdir $APP_HOME
-RUN mkdir $APP_HOME/static
-RUN mkdir $APP_HOME/media
 WORKDIR $APP_HOME
 
 # установка зависимостей и копирование из builder
