@@ -2,7 +2,7 @@
 # BUILDER #
 ###########
 
-FROM python:3.8.3-alpine as builder
+FROM python:3.8 as builder
 
 WORKDIR /usr/src/app
 
@@ -29,7 +29,7 @@ FROM nginx:latest
 
 COPY ./default.conf  /etc/nginx/conf.d/default.conf
 
-FROM python:3.8.3-alpine
+FROM python:3.8
 
 # создаем директорию для пользователя
 RUN mkdir -p /home/app
