@@ -10,18 +10,13 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # установка зависимостей
-RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
+RUN apt-get update \
+    && apt-get -y upgrade
 RUN pip install --upgrade pip
 
 # установка зависимостей
 COPY ./requirements.txt .
 RUN pip install --upgrade pip
-RUN apt-get install -y python3-dev
-RUN apt-get install -y libevent-dev
-RUN pip install setuptools
-RUN pip install pyparser
-RUN pip install pyparsing
 RUN pip install wheel
 RUN pip install -r requirements.txt
 
