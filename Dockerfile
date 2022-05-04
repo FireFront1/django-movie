@@ -10,8 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # установка зависимостей
-RUN apt-get update \
-    && apt-get -y upgrade
+RUN apt-get update && apt-get -y upgrade
 RUN pip install --upgrade pip
 
 # установка зависимостей
