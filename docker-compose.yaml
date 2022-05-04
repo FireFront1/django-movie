@@ -61,5 +61,6 @@ services:
             - redis
         command: "celery -A django_movie flower --basic_auth=test_user:password_user"
 volumes:
-    static_data:
+    media_volume:
+    static_volume:
     postgres_data:
