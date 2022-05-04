@@ -16,6 +16,10 @@ RUN pip install --upgrade pip
 
 # установка зависимостей
 COPY ./requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install setuptools
+RUN pip install pyparser
+RUN pip install pyparsing
 RUN pip install wheel
 RUN pip install -r requirements.txt
 
