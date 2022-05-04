@@ -45,9 +45,6 @@ WORKDIR $APP_HOME
 
 # установка зависимостей и копирование из builder
 RUN apt-get update
-COPY --from=builder /usr/src/app/wheels /wheels
-COPY --from=builder /usr/src/app/requirements.txt .
-RUN pip install --no-cache /wheels/*
 
 # копирование entrypoint-prod.sh
 COPY scripts/entrypoint.prod.sh $APP_HOME
