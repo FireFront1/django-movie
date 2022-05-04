@@ -35,7 +35,8 @@ FROM python:3.8
 RUN mkdir -p /home/app
 
 # создаем отдельного пользователя
-RUN addgroup -S app && adduser -S app -G app
+RUN addgroup -S app
+RUN adduser -S app -G app
 
 # создание каталога для приложения
 ENV HOME=/home/app
