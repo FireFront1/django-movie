@@ -2,7 +2,7 @@ version: '3.3'
 services:
     web:
         build:
-            dockerfile: Dockerfile
+            context: .
         command: gunicorn django_project.wsgi:application --bind 0.0.0.0:8000
         # Открываем порт 8000 наружу
         expose:
