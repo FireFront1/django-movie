@@ -27,7 +27,7 @@ RUN pip install -r requirements.txt
 #nginx settings
 FROM nginx:latest
 
-COPY ./default.conf  /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf  /etc/nginx/conf.d/default.conf
 
 FROM python:3.8
 
