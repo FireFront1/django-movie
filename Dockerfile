@@ -44,7 +44,7 @@ RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
 # установка зависимостей и копирование из builder
-RUN apk update && apk add libpq
+RUN apt-get update && apt-get add libpq
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/*
