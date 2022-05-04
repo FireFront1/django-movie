@@ -1,37 +1,65 @@
-FROM ubuntu:18.04
-FROM python:3.8 as builder
+###########
+# BUILDER #
+###########
+
+FROM python:3.8.3-alpine as builder
+
+WORKDIR /usr/src/app
 
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONNUNBUFFERED 1
+ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update
-RUN apk add postgresql-dev gcc python3-dev musl-dev libc-dev linux-headers
-
-RUN apk add jpeg-dev zlib-dev libjpeg
-
+# установка зависимостей
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev
 RUN pip install --upgrade pip
+
+# проверка кода через линтер
+RUN pip install flake8
+COPY . .
+RUN flake8 --ignore=E501,F401 /usr/src/app/django_project
+
+# установка зависимостей
 COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r req.txt
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
-#### FINAL ####
 
-FROM python:3.8
+#########
+# FINAL #
+#########
 
-RUN mkdir /app
-COPY . /app
-WORKDIR /app
+FROM python:3.8.3-alpine
 
-RUN apt-get update && apt-get add libpq
-COPY --from=builder ./wheels /wheels
-COPY --from=builder ./req.txt .
+# создаем директорию для пользователя
+RUN mkdir -p /home/app
+
+# создаем отдельного пользователя
+RUN addgroup -S app && adduser -S app -G app
+
+# создание каталога для приложения
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/static
+RUN mkdir $APP_HOME/media
+WORKDIR $APP_HOME
+
+# установка зависимостей и копирование из builder
+RUN apk update && apk add libpq
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/*
 
-COPY ./scripts /scripts
-RUN chmod +x /scripts/*
+# копирование entrypoint-prod.sh
+COPY ./entrypoint.prod.sh $APP_HOME
 
-RUN mkdir -p /vol/media
-RUN mkdir -p /vol/static
+# копирование проекта Django
+COPY . $APP_HOME
 
-RUN chmod -R 755 /vol
+# изменение прав для пользователя app
+RUN chown -R app:app $APP_HOME
 
-ENTRYPOINT ["/scripts/entrypoint.prod.sh"]
+# изменение рабочего пользователя
+USER app
+
+ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
