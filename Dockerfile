@@ -51,7 +51,7 @@ COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/*
 
 # копирование entrypoint-prod.sh
-COPY ./entrypoint.prod.sh $APP_HOME
+COPY scripts/entrypoint.prod.sh $APP_HOME
 
 # копирование проекта Django
 COPY . $APP_HOME
